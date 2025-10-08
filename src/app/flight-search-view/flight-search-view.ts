@@ -3,12 +3,13 @@ import { Flight } from '../entities/flight';
 import { FormsModule } from '@angular/forms';
 import { FlightService } from './flight-service';
 import { DefaultFlightService } from './default-flight-service';
-import { DatePipe } from '@angular/common';
-import { CityPipe } from '../util/city-pipe';
+import { JsonPipe } from '@angular/common';
+import { FlightCard } from '../flight-card/flight-card';
 
 @Component({
   selector: 'app-flight-search-view',
-  imports: [FormsModule, DatePipe, CityPipe],
+  standalone: true,
+  imports: [FormsModule, FlightCard, JsonPipe],
   templateUrl: './flight-search-view.html',
   providers: [
     { provide: FlightService, useClass: DefaultFlightService }
@@ -18,19 +19,15 @@ export class FlightSearchView {
   from = 'Wien';
   to = 'Berlin';
 
-  showIata = false;
-
   flights: Flight[] = [];
-  selectedFlight: Flight | null = null;
+  basket: Record<number, boolean> = {
+    135: true
+  };
 
   private flightService = inject(FlightService);
 
   search(): void {
     this.flightService.loadFlights(this.from, this.to)
                       .subscribe(flights => this.flights = flights);
-  }
-
-  selectFlight(flight: Flight): void {
-    this.selectedFlight = flight;
   }
 }
