@@ -3,10 +3,11 @@ import { Flight } from '../entities/flight';
 import { FormsModule } from '@angular/forms';
 import { FlightService } from './flight-service';
 import { DefaultFlightService } from './default-flight-service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-flight-search-view',
-  imports: [FormsModule],
+  imports: [FormsModule, DatePipe],
   templateUrl: './flight-search-view.html',
   providers: [
     { provide: FlightService, useClass: DefaultFlightService }
