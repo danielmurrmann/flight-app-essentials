@@ -1,11 +1,11 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Flight } from '../entities/flight';
 import { DefaultFlightService } from './default-flight-service';
 import { DummyFlightService } from './dummy-flight-service';
 
 function flightServiceFactory() {
-  const useDummyValues = false; // inject(ConfigService).useDummyValues;
+  const useDummyValues = true; // inject(ConfigService).useDummyValues;
     if(useDummyValues) {
       return new DummyFlightService();
     } else {
