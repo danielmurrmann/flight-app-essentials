@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { FlightService } from './flight-service';
 import { DefaultFlightService } from './default-flight-service';
 import { DatePipe } from '@angular/common';
+import { CityPipe } from '../util/city-pipe';
 
 @Component({
   selector: 'app-flight-search-view',
-  imports: [FormsModule, DatePipe],
+  imports: [FormsModule, DatePipe, CityPipe],
   templateUrl: './flight-search-view.html',
   providers: [
     { provide: FlightService, useClass: DefaultFlightService }
@@ -16,6 +17,8 @@ import { DatePipe } from '@angular/common';
 export class FlightSearchView {
   from = 'Wien';
   to = 'Berlin';
+
+  showIata = false;
 
   flights: Flight[] = [];
   selectedFlight: Flight | null = null;
