@@ -1,11 +1,21 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Flight } from '../entities/flight';
 import { DefaultFlightService } from './default-flight-service';
+import { DummyFlightService } from './dummy-flight-service';
+
+function flightServiceFactory() {
+  const useDummyValues = false; // inject(ConfigService).useDummyValues;
+    if(useDummyValues) {
+      return new DummyFlightService();
+    } else {
+      return new DefaultFlightService();
+    }
+}
 
 @Injectable({
   providedIn: 'root',
-  useClass: DefaultFlightService
+  useFactory: flightServiceFactory
 })
 export abstract class FlightService {
   abstract loadFlights(from: string, to: string): Observable<Flight[]>;
