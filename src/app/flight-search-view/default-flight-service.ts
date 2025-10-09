@@ -1,8 +1,8 @@
-import { inject } from '@angular/core';
+import { inject, Signal } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Flight } from '../entities/flight';
-import { HttpClient } from '@angular/common/http';
-import { FlightService } from './flight-service';
+import { HttpClient, httpResource } from '@angular/common/http';
+import { FlightCriteria, FlightService } from './flight-service';
 import { BASE_URL } from '../util/base-url';
 
 export class DefaultFlightService implements FlightService {
@@ -14,5 +14,12 @@ export class DefaultFlightService implements FlightService {
     const params = { from, to };
     const headers = { Accept: 'application/json' };
     return this.httpClient.get<Flight[]>(url, { params, headers });
+  }
+
+  loadFlightsAsResource(criteria: Signal<FlightCriteria>) {
+    return httpResource<Flight[]>(() => ({
+    url: this.baseUrl + 'flight',
+    params: { ...criteria() }
+  }), { defaultValue: [] });
   }
 }

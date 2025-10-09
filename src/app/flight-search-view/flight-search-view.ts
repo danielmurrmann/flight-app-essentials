@@ -1,5 +1,4 @@
 import { Component, computed, inject, linkedSignal, signal } from '@angular/core';
-import { Flight } from '../entities/flight';
 import { FormsModule } from '@angular/forms';
 import { FlightService } from './flight-service';
 import { DefaultFlightService } from './default-flight-service';
@@ -22,20 +21,20 @@ function calculateFlightRoute(from: string, to: string) {
 export class FlightSearchView {
   from = signal('Wien');
   to = linkedSignal(() => { this.from(); return ''; });
+  criteria = computed(() => ({ from: this.from(), to: this.to()}));
 
   flightRoute = computed(() => calculateFlightRoute(this.from(), this.to()));
 
-  flights = signal<Flight[]>([]);
   basket = signal<Record<number, boolean>>({
     135: true
   });
 
   private flightService = inject(FlightService);
+  flightsResource = this.flightService.loadFlightsAsResource(this.criteria);
 
-  search(): void {
-    this.flightService.loadFlights(this.from(), this.to())
-                      .subscribe(flights => this.flights.set(flights));
-  }
+  // search(): void {
+  //   this.criteria.set({from: this.from(), to: this.to()});
+  // }
 
   updateBasket(flightId: number, state: boolean) {
     this.basket.update(currentBasket => ({ ...currentBasket, [flightId]: state }));

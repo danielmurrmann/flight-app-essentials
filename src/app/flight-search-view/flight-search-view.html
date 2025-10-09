@@ -10,13 +10,13 @@
   <input class="form-control" id="to" [(ngModel)]="to">
 </div>
 
-<button type="button" class="btn btn-primary" [disabled]="!from() || !to()" (click)="search()">Search</button>
-<div class="mt-2">Flight Route: {{flightRoute()}}</div>
+<!-- <button type="button" class="btn btn-primary" [disabled]="!from() || !to()" (click)="search()">Search</button> -->
+<div class="mt-2">Flight Route: {{flightRoute()}} | Is Loading: {{flightsResource.isLoading()}}</div>
 
 <hr>
 
 <div class="row row-cols-1 row-cols-md-4 g-4">
-  @for(flight of flights(); track flight.id) {
+  @for(flight of flightsResource.value(); track flight.id) {
   <div class="col">
     <app-flight-card [item]="flight" [selected]="basket()[flight.id]" (selectedChange)="updateBasket(flight.id, $event)" />
   </div>
