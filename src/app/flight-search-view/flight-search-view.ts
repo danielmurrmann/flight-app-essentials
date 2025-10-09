@@ -1,10 +1,14 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { Flight } from '../entities/flight';
 import { FormsModule } from '@angular/forms';
 import { FlightService } from './flight-service';
 import { DefaultFlightService } from './default-flight-service';
 import { JsonPipe } from '@angular/common';
 import { FlightCard } from '../flight-card/flight-card';
+
+function calculateFlightRoute(from: string, to: string) {
+  return from + ' - ' + to;
+}
 
 @Component({
   selector: 'app-flight-search-view',
@@ -18,6 +22,8 @@ import { FlightCard } from '../flight-card/flight-card';
 export class FlightSearchView {
   from = signal('Wien');
   to = signal('Berlin');
+
+  flightRoute = computed(() => calculateFlightRoute(this.from(), this.to()));
 
   flights = signal<Flight[]>([]);
   basket = signal<Record<number, boolean>>({
