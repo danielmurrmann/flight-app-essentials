@@ -4,6 +4,8 @@ import { FlightService } from './flight-service';
 import { DefaultFlightService } from './default-flight-service';
 import { JsonPipe } from '@angular/common';
 import { FlightCard } from '../flight-card/flight-card';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { debounceTime, filter } from 'rxjs';
 
 function calculateFlightRoute(from: string, to: string) {
   return from + ' - ' + to;
@@ -29,9 +31,12 @@ export class FlightSearchView {
     135: true
   });
 
-  private flightService = inject(FlightService);
-  flightsResource = this.flightService.loadFlightsAsResource(this.criteria);
+  criteria$ = toObservable(this.criteria);
+  flightsCriteria$ = this.criteria$.pipe(filter(c => c.from.length >= 3 && c.to.length >= 3), debounceTime(800));
+  flightsCritera = toSignal(this.flightsCriteria$, { initialValue: { from: '', to: '' } });
 
+  private flightService = inject(FlightService);
+  flightsResource = this.flightService.loadFlightsAsResource(this.flightsCritera);
 
   constructor() {
     effect(() => {
