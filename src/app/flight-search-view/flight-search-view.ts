@@ -1,4 +1,4 @@
-import { Component, computed, inject, linkedSignal, signal } from '@angular/core';
+import { Component, computed, effect, inject, linkedSignal, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FlightService } from './flight-service';
 import { DefaultFlightService } from './default-flight-service';
@@ -32,6 +32,12 @@ export class FlightSearchView {
   private flightService = inject(FlightService);
   flightsResource = this.flightService.loadFlightsAsResource(this.criteria);
 
+
+  constructor() {
+    effect(() => {
+      console.log(this.flightRoute());
+    });
+  }
   // search(): void {
   //   this.criteria.set({from: this.from(), to: this.to()});
   // }
