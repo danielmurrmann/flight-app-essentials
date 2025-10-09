@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, model } from '@angular/core';
 import { initialFlight } from '../entities/flight';
 import { DatePipe, NgStyle } from '@angular/common';
 import { CityPipe } from '../util/city-pipe';
@@ -9,17 +9,14 @@ import { CityPipe } from '../util/city-pipe';
   templateUrl: './flight-card.html'
 })
 export class FlightCard {
-  @Input() item = initialFlight;
-  @Input() selected = false;
-  @Output() selectedChange = new EventEmitter<boolean>();
+  item = input(initialFlight);
+  selected = model(false);
 
   select() {
-    this.selected = true;
-    this.selectedChange.emit(this.selected);
+    this.selected.set(true);
   }
 
   deselect() {
-    this.selected = false;
-    this.selectedChange.emit(this.selected);
+    this.selected.set(false);
   }
 }
