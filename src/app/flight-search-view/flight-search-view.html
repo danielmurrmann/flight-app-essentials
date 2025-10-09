@@ -1,14 +1,27 @@
 <h4>Flight Search</h4>
+<form #form="ngForm">
+  <div class="mb-3">
+    <label for="from" class="form-label">From</label>
+    <input class="form-control" id="from" name="from" [(ngModel)]="from" required minlength="3">
+    @if(form?.controls?.['from']?.touched && form?.controls?.['from']?.hasError('required')) {
+      <div class="form-text text-danger">This field is required!</div>
+    }
+    @if(form?.controls?.['from']?.touched && form?.controls?.['from']?.hasError('minlength')) {
+      <div class="form-text text-danger">Enter at least 3 characters!</div>
+    }
+  </div>
 
-<div class="mb-3">
-  <label for="from" class="form-label">From</label>
-  <input class="form-control" id="from" [(ngModel)]="from">
-</div>
-
-<div class="mb-3">
-  <label for="to" class="form-label">To</label>
-  <input class="form-control" id="to" [(ngModel)]="to">
-</div>
+  <div class="mb-3">
+    <label for="to" class="form-label">To</label>
+    <input class="form-control" id="to" name="to" [(ngModel)]="to" required minlength="3">
+    @if(form?.controls?.['to']?.touched && form?.controls?.['to']?.hasError('required')) {
+      <div class="form-text text-danger">This field is required!</div>
+    }
+    @if(form?.controls?.['to']?.touched && form?.controls?.['to']?.hasError('minlength')) {
+      <div class="form-text text-danger">Enter at least 3 characters!</div>
+    }
+  </div>
+</form>
 
 <!-- <button type="button" class="btn btn-primary" [disabled]="!from() || !to()" (click)="search()">Search</button> -->
 <div class="mt-2">Flight Route: {{flightRoute()}} | Is Loading: {{flightsResource.isLoading()}}</div>
