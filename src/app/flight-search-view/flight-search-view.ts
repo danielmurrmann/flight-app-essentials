@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, linkedSignal, signal } from '@angular/core';
 import { Flight } from '../entities/flight';
 import { FormsModule } from '@angular/forms';
 import { FlightService } from './flight-service';
@@ -21,7 +21,7 @@ function calculateFlightRoute(from: string, to: string) {
 })
 export class FlightSearchView {
   from = signal('Wien');
-  to = signal('Berlin');
+  to = linkedSignal(() => { this.from(); return ''; });
 
   flightRoute = computed(() => calculateFlightRoute(this.from(), this.to()));
 
