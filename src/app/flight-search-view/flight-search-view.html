@@ -10,14 +10,14 @@
   <input class="form-control" id="to" [(ngModel)]="to">
 </div>
 
-<button type="button" class="btn btn-primary" [disabled]="!from || !to" (click)="search()">Search</button>
+<button type="button" class="btn btn-primary" [disabled]="!from() || !to()" (click)="search()">Search</button>
 
 <hr>
 
 <div class="row row-cols-1 row-cols-md-4 g-4">
-  @for(flight of flights; track flight.id) {
+  @for(flight of flights(); track flight.id) {
   <div class="col">
-    <app-flight-card [item]="flight" [(selected)]="basket[flight.id]" />
+    <app-flight-card [item]="flight" [selected]="basket()[flight.id]" (selectedChange)="updateBasket(flight.id, $event)" />
   </div>
   }
 </div>
@@ -27,5 +27,5 @@
 <pre>
 Basket
 ---------------------------
-{{ basket | json }}
+{{ basket() | json }}
 </pre>

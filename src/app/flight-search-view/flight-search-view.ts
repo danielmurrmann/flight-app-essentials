@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Flight } from '../entities/flight';
 import { FormsModule } from '@angular/forms';
 import { FlightService } from './flight-service';
@@ -16,18 +16,22 @@ import { FlightCard } from '../flight-card/flight-card';
   ]
 })
 export class FlightSearchView {
-  from = 'Wien';
-  to = 'Berlin';
+  from = signal('Wien');
+  to = signal('Berlin');
 
-  flights: Flight[] = [];
-  basket: Record<number, boolean> = {
+  flights = signal<Flight[]>([]);
+  basket = signal<Record<number, boolean>>({
     135: true
-  };
+  });
 
   private flightService = inject(FlightService);
 
   search(): void {
-    this.flightService.loadFlights(this.from, this.to)
-                      .subscribe(flights => this.flights = flights);
+    this.flightService.loadFlights(this.from(), this.to())
+                      .subscribe(flights => this.flights.set(flights));
+  }
+
+  updateBasket(flightId: number, state: boolean) {
+    this.basket.update(currentBasket => ({ ...currentBasket, [flightId]: state }));
   }
 }
